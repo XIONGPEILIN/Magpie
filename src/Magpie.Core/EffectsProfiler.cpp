@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EffectsProfiler.h"
+#include "Logger.h"
 
 namespace Magpie {
 
@@ -107,6 +108,8 @@ void EffectsProfiler::QueryTimings(ID3D11DeviceContext* d3dDC) noexcept {
 	for (size_t i = 0; i < _passQueries.size(); ++i) {
 		uint64_t timestamp = GetQueryData<uint64_t>(d3dDC, _passQueries[i].get());
 		_timings[i] = (timestamp - prevTimestamp) * toMS;
+
+		Logger::Get().Info(fmt::format("Pass #{} GPU 耗时: {:.3f} 毫秒", i, _timings[i]));
 
 		prevTimestamp = timestamp;
 	}
